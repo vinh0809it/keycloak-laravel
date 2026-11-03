@@ -14,10 +14,12 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Http\Client\Factory as Http;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Vinh0809it\KeycloakLaravel\Auth\DevTokens;
 use Vinh0809it\KeycloakLaravel\Auth\KeycloakGuard;
 use Vinh0809it\KeycloakLaravel\Auth\TokenVerifier;
+use Vinh0809it\KeycloakLaravel\Http\Middleware\RequireRole;
 
 /**
  * The `keycloak` auth guard driver, configured per guard in config/auth.php:
@@ -62,6 +64,7 @@ final class KeycloakServiceProvider extends ServiceProvider
         /** @var array{dev_tokens?: array<string, mixed>, cookies?: array{access?: array{name?: ?string}, refresh?: array{name?: ?string}}, clients?: array<string, array{login_cookie?: array{name?: ?string}}>} $config */
         $config = $this->app['config']['keycloak'];
         EncryptCookies::except(Keycloak::cookieNames($config));
+        $this->app->make(Router::class)->aliasMiddleware(RequireRole::ALIAS, RequireRole::class);
         DevTokens::assertAllowed((array) ($config['dev_tokens'] ?? []), $this->app->environment(), (bool) $this->app['config']['app.debug']);
 
         // AuthManager binds the callback to itself: $this in it is the AuthManager.
