@@ -1,0 +1,65 @@
+{
+    "name": "vinh0809it/keycloak-laravel",
+    "type": "library",
+    "description": "Keycloak for Laravel: an auth guard verifying the realms' access tokens (JWKS with key rotation, iss/aud/exp) through firebase/php-jwt, per-realm and per-client user resolution, a client for the realm's endpoints and service tokens, a backend-for-frontend browser login (PKCE, state) with session cookies, and a signing test fake.",
+    "keywords": [
+        "keycloak",
+        "laravel",
+        "oidc",
+        "openid-connect",
+        "jwt",
+        "jwks",
+        "guard",
+        "authentication"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/vinh0809it/keycloak-laravel",
+    "authors": [
+        {
+            "name": "Vinh Vo",
+            "email": "vinh0809it@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-openssl": "*",
+        "php": "^8.2",
+        "firebase/php-jwt": "^7.1.1",
+        "illuminate/auth": "^12.0 || ^13.0",
+        "illuminate/cache": "^12.0 || ^13.0",
+        "illuminate/container": "^12.0 || ^13.0",
+        "illuminate/contracts": "^12.0 || ^13.0",
+        "illuminate/cookie": "^12.0 || ^13.0",
+        "illuminate/http": "^12.0 || ^13.0",
+        "illuminate/support": "^12.0 || ^13.0",
+        "psr/log": "^2.0 || ^3.0",
+        "symfony/http-foundation": "^7.2 || ^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0 || ^11.0",
+        "phpunit/phpunit": "^11.5 || ^12.0",
+        "phpstan/phpstan": "^2.1",
+        "friendsofphp/php-cs-fixer": "^3.94"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vinh0809it\\KeycloakLaravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vinh0809it\\KeycloakLaravel\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vinh0809it\\KeycloakLaravel\\KeycloakServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
