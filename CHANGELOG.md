@@ -7,6 +7,8 @@ backward compatibility; each such break is listed here.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-03
+
 ### Added
 
 - `keycloak.role`: a route middleware letting through the tokens that hold a realm role (`admin`)
@@ -55,5 +57,6 @@ backward compatibility; each such break is listed here.
 - `KeycloakUnavailable` does not chain the HTTP client's exception, which holds the request and its
   secrets; the client's grant fields, PKCE verifier and code are `#[\SensitiveParameter]`.
 
-[Unreleased]: https://github.com/vinh0809it/keycloak-laravel/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/vinh0809it/keycloak-laravel/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/vinh0809it/keycloak-laravel/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/vinh0809it/keycloak-laravel/releases/tag/v0.1.0
