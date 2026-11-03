@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Vinh0809it\KeycloakLaravel\Auth;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * The verified claims of a Keycloak access token: the standard ones typed, the rest reachable by
  * name.
@@ -34,6 +36,14 @@ final readonly class Claims
         public array $clientRoles,
         public array $all,
     ) {
+    }
+
+    /** The claims of the token a `keycloak` guard authenticated $request with, if one did. */
+    public static function of(Request $request): ?self
+    {
+        $claims = $request->attributes->get(self::class);
+
+        return $claims instanceof self ? $claims : null;
     }
 
     /**

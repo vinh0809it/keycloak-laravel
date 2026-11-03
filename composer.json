@@ -1,7 +1,7 @@
 {
     "name": "vinh0809it/keycloak-laravel",
     "type": "library",
-    "description": "Keycloak for Laravel: an auth guard verifying the realms' access tokens (JWKS with key rotation, iss/aud/exp) through firebase/php-jwt, per-realm and per-client user resolution, a client for the realm's endpoints and service tokens, a backend-for-frontend browser login (PKCE, state) with session cookies, and a signing test fake.",
+    "description": "Stateless Keycloak for Laravel: an auth guard verifying realm access tokens with firebase/php-jwt (JWKS with key rotation, iss/aud/exp/typ), per-realm and per-client user resolution, a role middleware, a client and service tokens, a backend-for-frontend browser login kept in cookies, and a signing test fake. No server-side session.",
     "keywords": [
         "keycloak",
         "laravel",
@@ -30,6 +30,7 @@
         "illuminate/contracts": "^12.0 || ^13.0",
         "illuminate/cookie": "^12.0 || ^13.0",
         "illuminate/http": "^12.0 || ^13.0",
+        "illuminate/routing": "^12.0 || ^13.0",
         "illuminate/support": "^12.0 || ^13.0",
         "psr/log": "^2.0 || ^3.0",
         "symfony/http-foundation": "^7.2 || ^8.0"

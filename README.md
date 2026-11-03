@@ -1,11 +1,15 @@
 # Keycloak for Laravel
 
-Keycloak for Laravel APIs and backends-for-frontends:
+Keycloak for Laravel APIs and backends-for-frontends, stateless: every request carries its access
+token, as a bearer or in a cookie, and is verified on its own. Nothing is kept in Laravel's session,
+so it suits APIs, SPAs and mobile backends; a Blade or Livewire app signing in through Laravel's
+session guard is not what it is built for.
 
 - **The `keycloak` auth guard**: each bearer verified against its realm's published keys with
   [firebase/php-jwt](https://github.com/googleapis/php-jwt) (fetched from the JWKS endpoint, cached,
   refetched when the realm rotates them), the realm's `iss`, your API's `aud`, an `exp` and a `sub`
   required, then turned into your user by a resolver of yours, chosen per realm and per client.
+- **`keycloak.role`**: a route middleware letting through the tokens that hold a realm or client role.
 - **A client for the realm**: any grant (an SPI's direct grant included), refresh, logout,
   revocation, userinfo, the realm's own resources, and a service account's token cached for every
   process.
@@ -118,6 +122,21 @@ The app itself still boots, so artisan runs in a build step without the runtime 
 
 `keycloak.leeway` is set on php-jwt's `JWT::$leeway`, a process-wide static: code of the app that
 calls `JWT::decode()` itself sees the same leeway once the guard has verified a token.
+
+### Roles
+
+`keycloak.role` lets a request through when the token that authenticated it holds one of the listed
+roles, a realm role (`admin`) or a client's (`my-api:editor`), and answers a 403 otherwise. It goes
+after `auth:<guard>`:
+
+```php
+Route::middleware(['auth:api', 'keycloak.role:admin'])->group(...);
+Route::middleware(['auth:api', 'keycloak.role:admin,my-api:editor'])->get(...);   // any of them
+```
+
+`Claims::of($request)` gives the claims of that token anywhere later on (a controller, a policy, a
+gate). A request another guard authenticated (`auth:api,legacy`) has none, so `keycloak.role`
+refuses it.
 
 ### Several realms
 

@@ -7,6 +7,12 @@ backward compatibility; each such break is listed here.
 
 ## [Unreleased]
 
+### Added
+
+- `keycloak.role`: a route middleware letting through the tokens that hold a realm role (`admin`)
+  or a client's (`my-api:editor`), a 403 otherwise.
+- `Claims::of($request)`: the claims of the token a `keycloak` guard authenticated the request with.
+
 ## [0.1.0] - 2026-11-03
 
 ### Added

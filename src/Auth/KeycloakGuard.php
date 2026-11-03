@@ -23,7 +23,8 @@ use Vinh0809it\KeycloakLaravel\Realm;
  * A token of a realm under `by_realm` is resolved among that realm's entry alone: its `by_client`
  * by the token's `azp`, else its `resolver`; a token of an other issuer by that issuer's resolver.
  * Any other token: the guard's `by_client`, else its `resolver`. A token none of them claims is
- * refused. A dev token ({@see DevTokens}) skips the verification, not the resolution.
+ * refused. A dev token ({@see DevTokens}) skips the verification, not the resolution. The claims of
+ * the token that authenticated the request are kept on it: {@see Claims::of()}.
  *
  * @phpstan-type Resolvers array{resolver?: ?class-string<ClaimsResolver>, by_client?: array<string, class-string<ClaimsResolver>>}
  * @phpstan-type GuardConfig array{realms?: list<string>, other_issuers?: list<array{url?: ?string, issuer?: ?string, resolver: class-string<ClaimsResolver>}>, audience?: ?string, cookie?: bool, resolver?: ?class-string<ClaimsResolver>, by_client?: array<string, class-string<ClaimsResolver>>, by_realm?: array<string, class-string<ClaimsResolver>|Resolvers>}
@@ -68,8 +69,12 @@ final readonly class KeycloakGuard
 
             /** @var ClaimsResolver $resolver */
             $resolver = $this->container->make($this->resolverOf($claims, $others));
+            $user = $resolver->resolve($claims);
+            if (null !== $user) {
+                $request->attributes->set(Claims::class, $claims);
+            }
 
-            return $resolver->resolve($claims);
+            return $user;
         } catch (InvalidToken $e) {
             $this->container->make(LoggerInterface::class)->debug('The keycloak guard "{guard}" refused a token: {reason}', ['guard' => $this->name, 'reason' => $e->getMessage()]);
 
